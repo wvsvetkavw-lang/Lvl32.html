@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LEVEL 32: НАЧАЛО</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+
+@keyframes blinkRed{0%,100%{background:#0a0a0a}50%{background:#3a0a0a}}
+@keyframes blinkYellow{0%,100%{background:#0a0a0a}50%{background:#3a320a}}
+@keyframes blinkOrange{0%,100%{background:#0a0a0a}50%{background:#3a200a}}
+@keyframes textBlink{0%,100%{opacity:1}50%{opacity:.35}}
+@keyframes popin{0%{transform:translateY(-30px);opacity:0}100%{transform:translateY(0);opacity:1}}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-6px)}80%{transform:translateX(6px)}}
+@keyframes sparkleFly{0%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-60px) scale(0)}}
+@keyframes glowPulse{0%,100%{box-shadow:0 0 10px rgba(212,197,160,.3)}50%{box-shadow:0 0 30px rgba(212,197,160,.9)}}
+@keyframes fadeInUp{0%{opacity:0;transform:translateY(15px)}100%{opacity:1;transform:translateY(0)}}
+@keyframes letterFly{0%{transform:scale(0) rotate(-180deg);opacity:0}60%{transform:scale(1.3) rotate(10deg);opacity:1}100%{transform:scale(1) rotate(0);opacity:1}}
+@keyframes bossFlash{0%{background:#0a0a0a}20%{background:#fff}40%{background:#0a0a0a}60%{background:#d4c5a0}100%{background:#0a0a0a}}
+@keyframes bossExplode{0%{transform:scale(1);opacity:1}100%{transform:scale(3);opacity:0}}
+@keyframes dustFloat{0%{transform:translateY(100vh) translateX(0);opacity:0}10%{opacity:.6}90%{opacity:.6}100%{transform:translateY(-10vh) translateX(30px);opacity:0}}
+
+body{background:#0a0a0a;color:#d4c5a0;font-family:'Courier New',monospace;min-height:100vh;display:flex;justify-content:center;padding:12px;transition:background .5s;position:relative;overflow-x:hidden}
+body.critRed{animation:blinkRed 1.2s infinite}
+body.critYellow{animation:blinkYellow 1.2s infinite}
+body.critOrange{animation:blinkOrange 1.2s infinite}
+body.shake{animation:shake .4s}
+body.bossWin{animation:bossFlash 1s ease-out}
+
+.box{width:100%;max-width:480px;background:#111;border:1px solid #2a2a2a;border-radius:4px;padding:16px;position:relative;transition:box-shadow .4s;z-index:2}
+.box.critRed{border-color:#c44;box-shadow:0 0 30px rgba(200,60,60,.4)}
+.box.critYellow{border-color:#cc4;box-shadow:0 0 30px rgba(200,200,60,.4)}
+.box.critOrange{border-color:#c84;box-shadow:0 0 30px rgba(200,130,60,.4)}
+.box.glow{animation:glowPulse 1s ease-in-out}
+.box.fadeIn{animation:fadeInUp .5s ease-out}
+
+h1{font-size:17px;letter-spacing:3px;text-align:center;margin-bottom:3px}
+h2{font-size:12px;letter-spacing:4px;text-align:center;color:#d4c5a0;font-weight:normal;margin-bottom:2px}
+.sub{font-size:8px;letter-spacing:3px;text-align:center;color:#5a4a3a;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid #2a2a2a}
+.stat{font-size:10px;letter-spacing:1px;padding:6px 8px;background:#0d0d0d;border:1px solid #1f1f1f;border-radius:2px;margin-bottom:10px;color:#8a7a5a;text-align:center}
+.stat b{color:#d4c5a0}
+.stat .red{color:#ff3333;animation:textBlink .8s infinite}
+.stat .yellow{color:#ffee44;animation:textBlink .8s infinite}
+.stat .orange{color:#ff9944;animation:textBlink .8s infinite}
+.bar{height:4px;background:#1a1a1a;border-radius:2px;overflow:hidden;margin-top:3px}
+.bar>div{height:100%;transition:width .4s}
+.p{font-size:12px;line-height:1.7;color:#b8a880;margin-bottom:8px}
+.p b{color:#d4c5a0}
+.p .red{color:#ff4444}
+.p .grn{color:#8c8}
+.p hr{border:none;border-top:1px dashed #2a2a2a;margin:8px 0}
+.badge{display:inline-block;padding:2px 8px;border:1px solid #d4c5a0;color:#d4c5a0;font-size:8px;letter-spacing:2px;margin-bottom:8px}
+.btn{display:block;width:100%;padding:12px;margin:6px 0;background:#1a1a1a;border:1px solid #3a3a3a;color:#d4c5a0;font-family:'Courier New',monospace;font-size:12px;letter-spacing:1px;cursor:pointer;border-radius:2px;text-align:center;transition:background .15s,transform .1s}
+.btn:active{background:#2a2a2a;border-color:#d4c5a0;transform:scale(.98)}
+.inp{width:100%;padding:11px;background:#0a0a0a;border:1px solid #3a3a3a;color:#d4c5a0;font-family:'Courier New',monospace;font-size:14px;text-align:center;letter-spacing:2px;border-radius:2px;outline:none;margin:8px 0}
+.inp:focus{border-color:#d4c5a0}
+.msg{padding:10px;margin:8px 0;border-radius:2px;font-size:11px;line-height:1.5;display:none}
+.msg.err{display:block;background:rgba(180,40,40,.1);border:1px solid rgba(180,40,40,.4);color:#c44}
+.msg.ok{display:block;background:rgba(80,160,80,.1);border:1px solid rgba(80,160,80,.4);color:#8c8}
+.msg.info{display:block;background:rgba(212,197,160,.06);border:1px solid rgba(212,197,160,.25);color:#b8a880}
+.final{font-size:13px;line-height:1.8;text-align:center;padding:10px 0}
+.final .big{font-size:16px;letter-spacing:2px;margin:10px 0}
+.final video{width:100%;border-radius:4px;margin:12px 0;border:1px solid #2a2a2a}
+.letter{font-size:12px;line-height:1.7;text-align:left;padding:10px 4px;color:#c8b890}
+.letter .head{font-size:14px;letter-spacing:2px;text-align:center;color:#d4c5a0;margin-bottom:10px}
+.letter .center{text-align:center;font-size:14px;line-height:1.9}
+.frag{display:inline-block;width:30px;height:30px;line-height:28px;text-align:center;border:1px solid #2a2a2a;border-radius:2px;margin:2px;font-size:14px;color:#2a2a2a;transition:all .3s}
+.frag.on{border-color:#d4c5a0;color:#d4c5a0;animation:letterFly .6s ease-out,glowPulse 1.5s ease-in-out infinite}
+.foot{text-align:center;padding-top:10px;border-top:1px solid #2a2a2a;margin-top:12px;font-size:8px;color:#4a3a2a;letter-spacing:2px}
+.sms{position:fixed;top:10px;left:50%;transform:translateX(-50%);max-width:440px;width:calc(100% - 24px);background:#1a1a1a;border:1px solid #d4c5a0;border-radius:4px;padding:12px;z-index:999;animation:popin .5s;box-shadow:0 0 30px rgba(212,197,160,.3);cursor:pointer}
+.sms .h{font-size:9px;color:#8a7a5a;letter-spacing:2px;margin-bottom:6px}
+.sms .b{font-size:12px;line-height:1.6;color:#b8a880;margin-bottom:8px}
+.sms .a{font-size:16px;color:#d4c5a0;text-align:center;letter-spacing:4px;font-weight:bold;padding:6px 0;border-top:1px dashed #2a2a2a;border-bottom:1px dashed #2a2a2a;margin:8px 0}
+.sms .x{text-align:center;font-size:11px;color:#d4c5a0;cursor:pointer;padding-top:6px;border-top:1px dashed #2a2a2a;margin-top:6px;font-weight:bold}
+.sms.ulyana{border-color:#8c8;box-shadow:0 0 30px rgba(140,200,140,.4)}
+.sms.ulyana .h{color:#8c8}
+.sms.achieve{border-color:#ffd700;box-shadow:0 0 30px rgba(255,215,0,.5);background:linear-gradient(135deg,#1a1a1a,#2a2418)}
+.sms.achieve .h{color:#ffd700;font-weight:bold;letter-spacing:3px}
+.sms.achieve .b{color:#ffe066}
+
+.avatar{position:fixed;top:10px;right:10px;width:44px;height:44px;border-radius:50%;border:2px solid #d4c5a0;background:#111;color:#d4c5a0;font-family:'Courier New',monospace;font-size:20px;font-weight:bold;display:flex;align-items:center;justify-content:center;z-index:100;box-shadow:0 0 15px rgba(212,197,160,.4);animation:fadeInUp .5s ease-out;letter-spacing:0}
+
+.dust{position:fixed;width:3px;height:3px;background:#d4c5a0;border-radius:50%;pointer-events:none;z-index:1;box-shadow:0 0 6px rgba(212,197,160,.8);animation-name:dustFloat;animation-timing-function:linear;animation-iteration-count:infinite}
+
+.sparkle{position:fixed;pointer-events:none;font-size:20px;color:#d4c5a0;animation:sparkleFly .9s ease-out forwards;z-index:1000}
+
+.bossBoom{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);font-size:80px;z-index:1000;pointer-events:none;animation:bossExplode 1s ease-out forwards}
+
+.diary{background:rgba(212,197,160,.05);border:1px solid rgba(212,197,160,.2);border-left:3px solid #d4c5a0;padding:10px 12px;margin:10px 0;font-size:11px;line-height:1.7;color:#b8a880;font-style:italic;animation:fadeInUp .5s ease-out}
+.diary .from{display:block;text-align:right;font-size:9px;color:#8a7a5a;font-style:normal;margin-top:6px;letter-spacing:2px}
+
+.cert{border:3px double #d4c5a0;padding:20px;margin:15px 0;background:linear-gradient(135deg,rgba(212,197,160,.05),rgba(212,197,160,.02));text-align:center;position:relative}
+.cert::before{content:'✦';position:absolute;top:5px;left:10px;color:#d4c5a0;font-size:12px}
+.cert::after{content:'✦';position:absolute;bottom:5px;right:10px;color:#d4c5a0;font-size:12px}
+.cert .title{font-size:10px;letter-spacing:4px;color:#8a7a5a;margin-bottom:10px}
+.cert .name{font-size:18px;letter-spacing:3px;color:#d4c5a0;margin:10px 0;font-weight:bold}
+.cert .sub{font-size:11px;color:#b8a880;line-height:1.6}
+.cert .date{font-size:10px;color:#8a7a5a;margin-top:12px;letter-spacing:2px}
+
+.inventory{position:fixed;bottom:8px;left:50%;transform:translateX(-50%);max-width:480px;width:calc(100% - 24px);background:rgba(17,17,17,.95);border:1px solid #2a2a2a;border-radius:4px;padding:6px 10px;font-size:9px;color:#8a7a5a;letter-spacing:1px;display:flex;justify-content:space-around;flex-wrap:wrap;z-index:50;backdrop-filter:blur(4px)}
+.inventory span{white-space:nowrap}
+.inventory b{color:#d4c5a0}
+
+.system-log{position:fixed;bottom:38px;left:50%;transform:translateX(-50%);max-width:480px;width:calc(100% - 24px);text-align:center;font-size:8px;color:#4a3a2a;letter-spacing:2px;font-family:'Courier New',monospace;z-index:49;pointer-events:none;opacity:0;transition:opacity .5s}
+.system-log.show{opacity:1}
+</style>
+</head>
+<body>
+<div class="box" id="box">
+<h1>LEVEL 32</h1>
+<h2>НАЧАЛО</h2>
+<div class="sub">MMORPG · ИГРА</div>
+<div id="c"></div>
+<div class="foot">LEVEL 32 · MMORPG</div>
+</div>
+<div class="system-log" id="systemLog"></div>
+<div class="inventory" id="inventory"></div>
+<script>
+/* ============================================================
+   ЗВУКИ
+   ============================================================ */
+var AudioCtx = window.AudioContext || window.webkitAudioContext;
+var audioCtx = null;
+function initAudio(){ if(!audioCtx && AudioCtx){ try{ audioCtx = new AudioCtx(); }catch(e){} } }
+function playTone(freq, dur, type, vol){
+  initAudio();
+  if(!audioCtx) return;
+  try{
+    var o = audioCtx.createOscillator();
+    var g = audioCtx.createGain();
+    o.type = type || 'sine';
+    o.frequency.value = freq;
+    g.gain.value = vol || 0.08;
+    o.connect(g); g.connect(audioCtx.destination);
+    o.start();
+    g.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + dur);
+    o.stop(audioCtx.currentTime + dur);
+  }catch(e){}
+}
+function playClick(){ playTone(880, 0.06, 'square', 0.05); }
+function playBeep(){ playTone(180, 0.4, 'sawtooth', 0.12); setTimeout(function(){ playTone(180, 0.4, 'sawtooth', 0.12); }, 500); }
+function playDing(){ playTone(1320, 0.2, 'sine', 0.1); setTimeout(function(){ playTone(1760, 0.3, 'sine', 0.08); }, 100); }
+function playFanfare(){ var notes=[523,659,784,1047]; notes.forEach(function(n,i){ setTimeout(function(){ playTone(n,0.25,'triangle',0.1); }, i*120); }); }
+function playError(){ playTone(220, 0.15, 'square', 0.08); setTimeout(function(){ playTone(180, 0.2, 'square', 0.08); }, 120); }
+function playCrit(){ playTone(440, 0.15, 'sawtooth', 0.1); setTimeout(function(){ playTone(330, 0.15, 'sawtooth', 0.1); }, 200); setTimeout(function(){ playTone(440, 0.15, 'sawtooth', 0.1); }, 400); }
+function playStep(){ playTone(120, 0.08, 'square', 0.04); setTimeout(function(){ playTone(100, 0.08, 'square', 0.03); }, 80); }
+function playFragment(){
+  playTone(1047, 0.15, 'sine', 0.1);
+  setTimeout(function(){ playTone(1319, 0.15, 'sine', 0.1); }, 100);
+  setTimeout(function(){ playTone(1568, 0.3, 'sine', 0.1); }, 200);
+}
+function playAchievement(){
+  var notes = [659, 784, 988, 1319];
+  notes.forEach(function(n, i){ setTimeout(function(){ playTone(n, 0.2, 'triangle', 0.12); }, i * 100); });
+}
+function playSave(){
+  playTone(523, 0.15, 'sine', 0.1);
+  setTimeout(function(){ playTone(784, 0.3, 'sine', 0.1); }, 150);
+}
+
+/* ============================================================
+   АНИМАЦИИ
+   ============================================================ */
+function shakeScreen(){ document.body.classList.add('shake'); setTimeout(function(){ document.body.classList.remove('shake'); }, 400); }
+function glowBox(){ box.classList.add('glow'); setTimeout(function(){ box.classList.remove('glow'); }, 1000); }
+function fadeInBox(){ box.classList.add('fadeIn'); setTimeout(function(){ box.classList.remove('fadeIn'); }, 500); }
+function sparkle(n){
+  n = n || 8;
+  for(var i = 0; i < n; i++){
+    (function(i){
+      setTimeout(function(){
+        var s = document.createElement('div');
+        s.className = 'sparkle';
+        s.textContent = ['✦','✧','✩','★','☆'][Math.floor(Math.random()*5)];
+        s.style.left = (window.innerWidth/2 + (Math.random()-0.5)*200) + 'px';
+        s.style.top = (window.innerHeight/2 + (Math.random()-0.5)*100) + 'px';
+        s.style.color = ['#d4c5a0','#ffddaa','#ffeecc','#c8b890'][Math.floor(Math.random()*4)];
+        document.body.appendChild(s);
+        setTimeout(function(){ s.remove(); }, 1000);
+      }, i * 60);
+    })(i);
+  }
+}
+
+/* ============================================================
+   АВАТАР, ПЫЛИНКИ, ИНВЕНТАРЬ, SYSTEM LOG
+   ============================================================ */
+function addAvatar(){
+  if(document.getElementById('heroAvatar')) return;
+  var a = document.createElement('div');
+  a.id = 'heroAvatar';
+  a.className = 'avatar';
+  a.textContent = 'А';
+  document.body.appendChild(a);
+}
+function addDust(){
+  for(var i = 0; i < 15; i++){
+    (function(i){
+      setTimeout(function(){
+        var d = document.createElement('div');
+        d.className = 'dust';
+        d.style.left = Math.random() * 100 + '%';
+        d.style.animationDuration = (12 + Math.random() * 12) + 's';
+        d.style.animationDelay = (Math.random() * 8) + 's';
+        d.style.opacity = (0.3 + Math.random() * 0.5);
+        document.body.appendChild(d);
+      }, i * 400);
+    })(i);
+  }
+}
+function updateInventory(){
+  var el = document.getElementById('inventory');
+  if(!el) return;
+  var fragCount = S.frag.length;
+  var saved = S.save ? 1 : 0;
+  var snkLeft = SNK_CODES.length - S.usedSnk.length;
+  var pwrLeft = PWR_CODES.length - S.usedPwr.length;
+  el.innerHTML = '<span>🍫 SNK: <b>'+snkLeft+'</b></span>'+
+    '<span>🥤 PWR: <b>'+pwrLeft+'</b></span>'+
+    '<span>🔑 ФРАГМЕНТЫ: <b>'+fragCount+'/5</b></span>'+
+    '<span>💾 СОХР: <b>'+saved+'</b></span>';
+}
+var systemLogTimer = null;
+function showSystemLog(text){
+  var el = document.getElementById('systemLog');
+  if(!el) return;
+  el.textContent = 'SYSTEM LOG // ' + text;
+  el.classList.add('show');
+  if(systemLogTimer) clearTimeout(systemLogTimer);
+  systemLogTimer = setTimeout(function(){ el.classList.remove('show'); }, 5000);
+}
+
+/* ============================================================
+   ИГРА
+   ============================================================ */
+var c = document.getElementById('c');
+var box = document.getElementById('box');
+var S = {
+  xp:0, hp:100, en:100, frag:[],
+  critTimer:null, critSecs:0, critType:null,
+  bossKills:0, save:null, currentFunc:null, nextFunc:null,
+  inCrit:false, inBoss:false, usedSnk:[], usedPwr:[],
+  startTime:Date.now(), errors:0, deaths:0, hintsUsed:0,
+  achievements:[], hpRestored:0, enSpent:0, errorStreak:0,
+  finalDone:false, heroName:'', heroClass:''
+};
+var bossTimer=null, bossSecs=600, bossHintShown=false;
+var finalTimer=null, finalSecs=300, finalHintShown=false;
+var L19err=0;
+var bossErr=0;
+var ulyanaTimer=null;
+window._waitingForSms = false;
+window._afterSms = null;
+
+var SNK_CODES=['SNK-001','SNK-777','SNK-QW3','SNK-Z9X','SNK-KT5','SNK-MZ7','SNK-PL2','SNK-RD8','SNK-VN4','SNK-BG6'];
+var PWR_CODES=['PWR-002','PWR-888','PWR-BR4','PWR-LP9','PWR-KT5'];
+
+function goNext(name, ms){
+  if(ulyanaTimer) clearTimeout(ulyanaTimer);
+  S.nextFunc = name;
+  S.transitioning = true;
+  playStep();
+  setTimeout(function(){
+    S.transitioning = false;
+    if(S.inCrit) return;
+    var fn = window[name];
+    S.nextFunc = null;
+    if(typeof fn === 'function') fn();
+    updateInventory();
+  }, ms);
+}
+function checkCrit(){
+  if(S.inBoss) return;
+  if(S.transitioning) return;
+  if((S.hp <= 20 || S.en <= 20) && !S.inCrit){ showCritScreen(); }
+}
+function hp(n){
+  if(n > 0) S.hpRestored += n;
+  S.hp = Math.max(0, Math.min(100, S.hp + n));
+  setTimeout(checkCrit, 60);
+  updateInventory();
+}
+function en(n){
+  if(n < 0) S.enSpent += -n;
+  S.en = Math.max(0, Math.min(100, S.en + n));
+  setTimeout(checkCrit, 60);
+  updateInventory();
+}
+function xp(n){ S.xp += n; }
+function fmt(s){ var m = Math.floor(s/60), ss = s%60; return (m<10?'0':'')+m+':'+(ss<10?'0':'')+ss; }
+function norm(x){ return x.toUpperCase().replace(/[\s\-]/g,''); }
+
+function hideSms(){
+  var e = document.getElementById('sms');
+  if(e) e.remove();
+  window._waitingForSms = false;
+  if(window._afterSms && typeof window._afterSms === 'function'){
+    var fn = window._afterSms;
+    window._afterSms = null;
+    setTimeout(fn, 300);
+  }
+}
+function showSms(text, answer){
+  var old = document.getElementById('sms');
+  if(old) old.remove();
+  S.hintsUsed++;
+  window._waitingForSms = true;
+  var d = document.createElement('div');
+  d.id = 'sms'; d.className = 'sms';
+  d.innerHTML = '<div class="h">📡 ВХОДЯЩЕЕ СООБЩЕНИЕ · NPC «СВЕТА»</div><div class="b">'+text+'</div><div class="a">'+answer+'</div><div class="x">[ закрыть ]</div>';
+  d.onclick = hideSms;
+  document.body.appendChild(d);
+}
+function showSmsUlyana(text){
+  var old = document.getElementById('sms');
+  if(old) old.remove();
+  window._waitingForSms = true;
+  var d = document.createElement('div');
+  d.id = 'sms'; d.className = 'sms ulyana';
+  d.innerHTML = '<div class="h">📡 ВХОДЯЩЕЕ СООБЩЕНИЕ · NPC «УЛЬЯНА»</div><div class="b">'+text+'</div><div class="x">[ закрыть ]</div>';
+  d.onclick = hideSms;
+  document.body.appendChild(d);
+}
+function showSkillNotification(letter){
+  var data = {
+    'М': { name:'МУДРОСТЬ', type:'пассивный', effect:'Позволяет отличать главное от второстепенного. Снижает риск неверного выбора.', extra:'Активируется автоматически при принятии решений.' },
+    'Я': { name:'ЯСНОСТЬ', type:'пассивный', effect:'Открывает скрытые объекты и невидимые тропы. Позволяет видеть то, что скрыто от других.', extra:'Радиус действия: личный. Время действия: постоянное.' },
+    'Ь': { name:'МЯГКОСТЬ', type:'тихий, пассивный', effect:'Смягчает удары. Гасит конфликты. Работает незаметно, но без него всё становится резким.', extra:'Не требует энергии. Нельзя потерять.' },
+    'С': { name:'СИЛА', type:'пассивный', effect:'Удерживает рейд в строю, когда тяжело. Не даёт союзникам пасть духом.', extra:'Активируется при критических ситуациях. Бонус к защите рейда: +50%.' },
+    'Е': { name:'ЕСТЕСТВО', type:'пассивный', effect:'Позволяет быть собой. Снимает любые маски. Усиливает связь с союзниками.', extra:'Активируется постоянно. Нельзя потерять.' }
+  };
+  var s = data[letter];
+  if(!s) return;
+  playAchievement();
+  var d = document.createElement('div');
+  d.id = 'sms'; d.className = 'sms achieve';
+  d.innerHTML = '<div class="h">✦ НОВЫЙ НАВЫК ПОЛУЧЕН</div>'+
+    '<div class="b">'+
+    '<b>НАЗВАНИЕ: '+s.name+'</b><br>'+
+    'ТИП: '+s.type+'<br>'+
+    'УРОВЕНЬ: 1<br><br>'+
+    '▸ Эффект:<br>'+s.effect+'<br><br>'+
+    '▸ '+s.extra+
+    '</div>'+
+    '<div class="x">[ закрыть ]</div>';
+  d.onclick = hideSms;
+  document.body.appendChild(d);
+}
+function showAchievement(title, desc){
+  playAchievement();
+  var d = document.createElement('div');
+  d.id = 'sms'; d.className = 'sms achieve';
+  d.innerHTML = '<div class="h">🏆 ACHIEVEMENT UNLOCKED</div><div class="b"><b>'+title+'</b><br>'+desc+'</div><div class="x">[ закрыть ]</div>';
+  d.onclick = hideSms;
+  document.body.appendChild(d);
+}
+function unlockAchievement(id, title, desc){
+  if(S.achievements.indexOf(id) >= 0) return;
+  S.achievements.push(id);
+  var savedAfter = window._afterSms;
+  var old = document.getElementById('sms');
+  if(old) old.remove();
+  window._afterSms = savedAfter;
+  showAchievement(title, desc);
+}
+function clearCrit(){
+  if(S.critTimer) clearInterval(S.critTimer);
+  S.critTimer = null; S.critSecs = 0; S.critType = null; S.inCrit = false;
+  box.classList.remove('critRed','critYellow','critOrange');
+  document.body.classList.remove('critRed','critYellow','critOrange');
+}
+function showCritScreen(){
+  if(S.inCrit) return;
+  var needHP = S.hp <= 20;
+  var needEN = S.en <= 20;
+  if(!needHP && !needEN) return;
+  S.inCrit = true;
+  playCrit();
+  var type = needHP && needEN ? 'orange' : (needHP ? 'red' : 'yellow');
+  S.critType = type;
+  if(type === 'red'){ box.classList.add('critRed'); document.body.classList.add('critRed'); S.critSecs = 900; }
+  if(type === 'yellow'){ box.classList.add('critYellow'); document.body.classList.add('critYellow'); S.critSecs = 900; }
+  if(type === 'orange'){ box.classList.add('critOrange'); document.body.classList.add('critOrange'); S.critSecs = 900; }
+  if(S.critTimer) clearInterval(S.critTimer);
+  S.critTimer = setInterval(function(){
+    S.critSecs--;
+    var el = document.getElementById('critT');
+    if(el) el.textContent = fmt(S.critSecs);
+    if(S.critSecs <= 0){ clearCrit(); die('timer'); }
+  }, 1000);
+  var title, sub, ph;
+  if(type === 'red'){ title='🔴 КРИТИЧЕСКИЙ УРОВЕНЬ HP.'; sub='❤️ HP: '+S.hp+'/100.<br>Персонаж при смерти.<br><br><b>Найди провизию.</b><br><b>Введи код с упаковки.</b>'; ph='КОД С УПАКОВКИ'; }
+  else if(type === 'yellow'){ title='🟡 ENERGY НА ИСХОДЕ.'; sub='⚡ ENERGY: '+S.en+'/100.<br>Персонаж теряет силы.<br><br><b>Найди ресурс.</b><br><b>Введи код с упаковки.</b>'; ph='КОД С УПАКОВКИ'; }
+  else { title='🟠 КРИТИЧЕСКОЕ СОСТОЯНИЕ.'; sub='❤️ HP: '+S.hp+'/100.<br>⚡ ENERGY: '+S.en+'/100.<br><br><b>Найди провизию и ресурс.</b><br><b>Введи коды.</b>'; ph='КОД С УПАКОВКИ'; }
+  c.innerHTML = '<div class="badge" style="border-color:#c44;color:#c44">СРОЧНО</div><div class="p" style="text-align:center"><b>'+title+'</b><br><br>'+sub+'<br><br>⏱ <b><span id="critT">'+fmt(S.critSecs)+'</span></b></div><input class="inp" id="a" placeholder="'+ph+'" autocomplete="off"><div class="msg" id="m"></div><button class="btn" onclick="critCheck()">АКТИВИРОВАТЬ</button>';
+  window.scrollTo(0,0);
+}
+function critCheck(){
+  var x = norm(document.getElementById('a').value);
+  var needHP = S.hp <= 20;
+  var needEN = S.en <= 20;
+  var gotHP = false, gotEN = false;
+  var snk = null, pwr = null;
+  for(var i = 0; i < SNK_CODES.length; i++){ if(norm(SNK_CODES[i]) === x){ snk = SNK_CODES[i]; break; } }
+  for(var i = 0; i < PWR_CODES.length; i++){ if(norm(PWR_CODES[i]) === x){ pwr = PWR_CODES[i]; break; } }
+  if(snk){
+    if(S.usedSnk.indexOf(snk) >= 0){ err('❌ КОД УЖЕ ИСПОЛЬЗОВАН.'); return; }
+    if(needHP){ S.hp = Math.min(100, S.hp + 50); S.usedSnk.push(snk); gotHP = true; S.hpRestored += 50; }
+    else { err('❌ ЭТО НЕ ТО. ИЩИ ДАЛЬШЕ.'); return; }
+  } else if(pwr){
+    if(S.usedPwr.indexOf(pwr) >= 0){ err('❌ КОД УЖЕ ИСПОЛЬЗОВАН.'); return; }
+    if(needEN){ S.en = Math.min(100, S.en + 50); S.usedPwr.push(pwr); gotEN = true; }
+    else { err('❌ ЭТО НЕ ТО. ИЩИ ДАЛЬШЕ.'); return; }
+  } else { err('❌ НЕВЕРНЫЙ КОД.'); return; }
+  if(gotHP || gotEN){
+    playDing();
+    updateInventory();
+    ok('✅ ПРЕДМЕТ АКТИВИРОВАН.');
+    if(gotHP && S.hpRestored >= 50){
+      unlockAchievement('hp50', 'ВТОРОЕ ДЫХАНИЕ', 'Восстановлено 50 HP.');
+    }
+    setTimeout(function(){
+      clearCrit();
+      var target = S.nextFunc || S.currentFunc;
+      S.nextFunc = null;
+      if(target && typeof window[target] === 'function'){ window[target](); }
+      else { start(); }
+    }, 1200);
+  }
+}
+function show(h, funcName){
+  if(funcName) S.currentFunc = funcName;
+  if(S.inCrit) return;
+  window._afterSms = null;
+  c.innerHTML = h;
+  fadeInBox();
+  window.scrollTo(0,0);
+  updateInventory();
+  if(!S.inBoss && (S.hp <= 20 || S.en <= 20) && !S.inCrit){ showCritScreen(); }
+}
+function err(t){
+  var m = document.getElementById('m');
+  if(m){ m.className='msg err'; m.textContent=t; }
+  playError(); shakeScreen(); S.errors++; S.errorStreak++;
+  if(S.errorStreak >= 3){
+    unlockAchievement('streak3', 'НЕ СДАЛСЯ', 'Совершено 3 ошибки подряд.');
+  }
+}
+function ok(t){ var m = document.getElementById('m'); if(m){ m.className='msg ok'; m.textContent=t; } playDing(); }
+function v(id){ return document.getElementById(id).value.toLowerCase().trim(); }
+function dmg(n){ hp(-n); if(S.hp <= 0){ die('hp'); return true; } return false; }
+
+function die(reason){
+  clearCrit(); hideSms();
+  S.nextFunc = null;
+  S.deaths++;
+  document.querySelector('h1').style.display = '';
+  document.querySelector('h2').style.display = '';
+  if(bossTimer) clearInterval(bossTimer); bossTimer = null;
+  if(finalTimer) clearInterval(finalTimer); finalTimer = null;
+  if(ulyanaTimer) clearTimeout(ulyanaTimer);
+  var buttons = '';
+  if(S.save){ buttons = '<button class="btn" onclick="loadSave()">ПРОДОЛЖИТЬ ('+S.save.date+')</button><button class="btn" onclick="restart()">НАЧАТЬ С НАЧАЛА</button>'; }
+  else { buttons = '<button class="btn" onclick="restart()">НАЧАТЬ С НАЧАЛА</button>'; }
+  var title = reason === 'timer' ? 'ВРЕМЯ ВЫШЛО' : 'ПЕРСОНАЖ ПОГИБ';
+  if(S.deaths >= 5){
+    c.innerHTML = '<div class="final"><div class="badge" style="border-color:#8c8;color:#8c8">💚 УЛЬЯНА СПАСАЕТ</div><div class="big" style="color:#8c8">ПАПА, ВСТАВАЙ!</div><hr style="border-color:#2a2a2a;margin:12px 0">Ульяна протягивает тебе руку.<br><br><b>HP восстановлено. ENERGY восстановлено.</b></div><button class="btn" onclick="restart()">НАЧАТЬ С НАЧАЛА</button>';
+    S.hp = 100; S.en = 100;
+    return;
+  }
+  unlockAchievement('firstDeath', 'ПОСЛЕДНИЙ ШАНС', 'Пережита смерть.');
+  c.innerHTML = '<div class="final"><div class="badge" style="border-color:#c44;color:#c44">💀 СМЕРТЬ</div><div class="big" style="color:#c44">'+title+'</div><hr style="border-color:#2a2a2a;margin:12px 0">❤️ HP: 0/100<br><br>'+buttons+'</div>';
+  window.scrollTo(0,0);
+}
+function restart(){
+  document.querySelector('h1').style.display = '';
+  document.querySelector('h2').style.display = '';
+  S = { xp:0, hp:100, en:100, frag:[], critTimer:null, critSecs:0, critType:null, bossKills:0, save:null, currentFunc:null, nextFunc:null, inCrit:false, inBoss:false, usedSnk:[], usedPwr:[], startTime:Date.now(), errors:0, deaths:0, hintsUsed:0, achievements:[], hpRestored:0, enSpent:0, errorStreak:0, finalDone:false, heroName:'', heroClass:'' };
+  L19err = 0; bossErr = 0;
+  clearCrit(); hideSms();
+  if(bossTimer) clearInterval(bossTimer);
+  if(finalTimer) clearInterval(finalTimer);
+  if(ulyanaTimer) clearTimeout(ulyanaTimer);
+  start();
+}
+function loadSave(){ clearCrit(); hideSms(); S.nextFunc = null; S.hp=100; S.en=100; S.bossKills=0; S.inBoss=false; bossErr=0; if(S.save && typeof S.save.func === 'function') S.save.func(); else start(); }
+function savePoint(date, func){
+  S.save = { date:date, func:func };
+  playSave();
+  updateInventory();
+}
+function stat(){
+  var hpCls = S.hp <= 20 ? 'red' : '';
+  var enCls = S.en <= 20 ? 'yellow' : '';
+  var tmr = '';
+  if(S.critTimer && S.critSecs > 0){
+    var cls = S.critType === 'orange' ? 'orange' : (S.critType === 'yellow' ? 'yellow' : 'red');
+    tmr = ' <span class="'+cls+'">⏱ <span id="critT">'+fmt(S.critSecs)+'</span></span>';
+  }
+  return '<div class="stat">XP <b>'+S.xp+'</b> · ❤️ <b class="'+hpCls+'">'+S.hp+'/100</b> · ⚡ <b class="'+enCls+'">'+S.en+'/100</b>'+tmr+'<div class="bar"><div style="width:'+S.hp+'%;background:#c66"></div></div><div class="bar"><div style="width:'+S.en+'%;background:#8c8"></div></div></div>';
+}
+function fragRow(){
+  var all = ['М','Я','Ь','С','Е'], h = '<div style="text-align:center;margin:6px 0">';
+  for(var i = 0; i < all.length; i++){
+    var on = S.frag.indexOf(all[i]) >= 0;
+    h += '<span class="frag '+(on?'on':'')+'" style="animation-delay:'+(i*0.1)+'s">'+(on?all[i]:'?')+'</span>';
+  }
+  return h + '</div>';
+}
+function diary(text){
+  return '<div class="diary">📖 '+text+'<span class="from">— Света</span></div>';
+}
+function addFragment(letter){
+  if(S.frag.indexOf(letter) < 0){
+    S.frag.push(letter);
+    playFragment();
+    sparkle(15);
+    glowBox();
+    updateInventory();
+    setTimeout(function(){ showSkillNotification(letter); }, 600);
+  }
+}
+
+/* ============================================================
+   УРОВНИ
+   ============================================================ */
+function start(){
+  document.querySelector('h1').style.display = '';
+  document.querySelector('h2').style.display = '';
+  clearCrit(); hideSms();
+  showSystemLog('Игрок приближается к неизвестному предмету.');
+  show('<div class="p" style="text-align:center;padding:10px 0"><b style="font-size:14px;letter-spacing:3px">LEVEL 32</b><br><b style="font-size:12px;letter-spacing:4px;color:#8a7a5a">НАЧАЛО</b><br><br>Специальное событие.<br>Легендарный лут существует.<br>Координаты неизвестны.<br><br>🔐 <b>Для доступа введи секретный код.</b></div><input class="inp" id="a" placeholder="КОД ДОСТУПА" autocomplete="off"><div class="msg" id="m"></div><button class="btn" onclick="cCode()">ВОЙТИ</button>','start');
+}
+function cCode(){
+  var x = document.getElementById('a').value.replace(/[\s\.\-\/]/g,'');
+  if(x === '26092026'){ ok('✅ ДОСТУП РАЗРЕШЁН.'); S.nextFunc='charCreate'; goNext('charCreate', 1000); }
+  else err('❌ ОТКАЗ.');
+}
+function charCreate(){
+  show('<div class="p" style="text-align:center;padding:10px 0"><b style="font-size:14px;letter-spacing:3px">СОЗДАНИЕ ПЕРСОНАЖА</b><br><br>Перед началом игры — создай своего героя.<br><br>Это важно. Игра запомнит твой выбор.</div><input class="inp" id="heroName" placeholder="ИМЯ ПЕРСОНАЖА" autocomplete="off"><div class="msg" id="m"></div><button class="btn" onclick="charName()">ДАЛЬШЕ</button>','charCreate');
+}
+function charName(){
+  var name = document.getElementById('heroName').value.trim();
+  if(name.length < 2){ err('❌ ИМЯ СЛИШКОМ КОРОТКОЕ.'); return; }
+  S.heroName = name;
+  ok('✅ ИМЯ: ' + name.toUpperCase() + '.');
+  setTimeout(function(){ charClass(); }, 800);
+}
+function charClass(){
+  show('<div class="p" style="text-align:center;padding:10px 0"><b style="font-size:14px;letter-spacing:3px">ВЫБЕРИ КЛАСС</b><br><br>Кем ты хочешь быть?<br><br>От класса зависит твоя роль в рейде.</div><button class="btn" onclick="pickClass(\'ВОИН\')">⚔️ ВОИН — держит удар</button><button class="btn" onclick="pickClass(\'МАГ\')">✨ МАГ — знает путь</button><button class="btn" onclick="pickClass(\'ЛУЧНИК\')">🏹 ЛУЧНИК — бьёт точно</button><div class="msg" id="m"></div>','charClass');
+}
+function pickClass(cls){
+  S.heroClass = cls;
+  ok('✅ КЛАСС: ' + cls + '.');
+  setTimeout(function(){
+    show('<div class="final">'+
+      '<div class="badge" style="border-color:#8c8;color:#8c8">✅ ПЕРСОНАЖ СОЗДАН</div>'+
+      '<div class="big" style="color:#8c8">'+S.heroName.toUpperCase()+'</div>'+
+      '<hr style="border-color:#2a2a2a;margin:12px 0">'+
+      'Класс: <b>'+S.heroClass+'</b><br>'+
+      'Уровень: <b>1</b><br>'+
+      'XP: <b>0</b><br><br>'+
+      '<b>Твой путь начинается.</b>'+
+      '</div>'+
+      '<button class="btn" onclick="prolog()">НАЧАТЬ ИГРУ</button>','charClass');
+  }, 800);
+}
+function prolog(){
+  show('<div class="p"><b>ПРОЛОГ</b><hr>В обычной игре персонаж получает опыт, добывает предметы, расходует ресурсы и открывает новые зоны.<br><br>Сегодня — особое событие.<br><br><b>Система предупреждает:</b><br>⚡ ENERGY будет расходоваться.<br>❤️ HP может снижаться.<br>🍫 Провизию ищи самостоятельно.<br>🥤 Ресурс ищи самостоятельно.<br>🔐 Расходники активируются кодами с упаковок.<br>🔑 Фрагменты выдаются в неправильном порядке.<br>👤 Один NPC скрывает свою роль.<br><br>И главное:<br><b>Легендарный лут не отображается в инвентаре.</b></div><button class="btn" onclick="L1()">НАЧАТЬ ИГРУ</button>','prolog');
+}
+
+function L1(){ show(stat()+'<div class="badge">LEVEL 01 · МАУНТ</div><div class="p">Система определяет маунта игрока.</div><div class="msg" id="m"></div><button class="btn" onclick="a1(0)">ЛОШАДЬ</button><button class="btn" onclick="a1(1)">ДРАКОН</button><button class="btn" onclick="a1(2)">РЫЖИК</button>','L1'); }
+function a1(x){ if(x === 2){ en(-12); xp(50); S.nextFunc='L2'; S.errorStreak = 0; ok('✅ МАУНТ: РЫЖИК.'); goNext('L2', 1000); } else { err('❌ ОТКАЗ.'); if(dmg(20)) return; } }
+
+function L2(){ show(stat()+'<div class="badge">LEVEL 02 · СКРЫТЫЙ NPC</div><div class="p">Обнаружен NPC с закрытым профилем.<br><br>• знает игрока более 14 лет;<br>• был до появления нынешнего состава партии;<br>• знает ресурсы.<br><br>Имя сохранено в цифрах:<br><b>19 — 3 — 6 — 20 — 1</b><br>(Ё не используется)<br><br>Восстанови имя.</div><input class="inp" id="a" placeholder="ИМЯ NPC" autocomplete="off"><div class="msg" id="m"></div><button class="btn" onclick="c2()">ПОДТВЕРДИТЬ</button>','L2'); }
+function c2(){ if(v('a') === 'света'){ en(-12); xp(50); S.nextFunc='L3'; S.errorStreak = 0; ok('✅ NPC: СВЕТА.'); goNext('L3', 1200); } else { err('❌ ОТКАЗ.'); if(dmg(20)) return; } }
+
+function L3(){ show(stat()+'<div class="badge">LEVEL 03 · РАСХОДНИК</div><div class="p">Выбери подходящий расходник.</div><div class="msg" id="m"></div><button class="btn" onclick="a3(0)">TWIX</button><button class="btn" onclick="a3(1)">SNICKERS</button><button class="btn" onclick="a3(2)">MILKY WAY</button>','L3'); }
+function a3(x){ if(x === 1){ en(-12); xp(75); S.nextFunc='L4'; S.errorStreak = 0; ok('✅ Предмет подтверждён.'); goNext('L4', 1200); } else { err('❌ ОТКАЗ.'); if(dmg(20)) return; } }
+
+function L4(){ show(stat()+'<div class="badge">LEVEL 04 · КОНВЕРТ №1</div><div class="p">Днём спит на ней подушка,<br>А по ночам — <b>Андрюшка</b>.<br><br>Что это?</div><input class="inp" id="a" placeholder="ОТВЕТ" autocomplete="off"><div class="msg" id="m"></div><button class="btn" onclick="c4()">ПОДТВЕРДИТЬ</button>','L4'); }
+function c4(){ var x = v('a'); if(x === 'кровать' || x === 'кроватка'){ en(-12); xp(100); S.nextFunc='L4b'; S.errorStreak = 0; show(stat()+'<div class="badge">НАЙДИ КОНВЕРТ</div><div class="p">Иди туда.<br><br><b>Введи ключ.</b></div><input class="inp" id="a" placeholder="КЛЮЧ" autocomplete="off"><div class="msg" id="m"></div><button class="btn" onclick="c4b()">ВВЕСТИ</button>','L4b'); } else { err('❌ ОТКАЗ.'); if(dmg(20)) return; } }
+function c4b(){ var x = document.getElementById('a').value.trim().toLowerCase(); if(x === 'м' || x === 'm'){ addFragment('М'); xp(50); S.nextFunc='L5'; S.errorStreak = 0; ok('✅ КЛЮЧ: М.'); goNext('L5', 1200); } else { err('❌ ОТКАЗ.'); if(dmg(20)) return; } }
+
+function L5(){ show(stat()+fragRow()+'<div class="badge">LEVEL 05 · СОХРАНЕНИЕ</div><div class="p">💾 <b>Дата: 17.04.2012</b><br><br>Что произошло в эту дату?</div><input class="inp" id="a" placeholder="ОТВЕТ" autocomplete="off"><div class="msg" id="m"></div><button class="btn" onclick="c5()">ПОДТВЕРДИТЬ</button>','L5'); }
+function c5(){ var x = v('a'); if(x === 'знакомство' || x === 'познакомились' || x === 'встреча'){ en(-12); xp(150); savePoint('17.04.2012', L6); S.nextFunc='L6'; S.errorStreak = 0; unlockAchievement('memory1', 'ПАМЯТЬ', 'Пройден уровень с датой без ошибки.'); show(stat()+fragRow()+diary('Эта дата — наша точка сохранения. С неё всё началось.')+'<div class="final"><div class="badge" style="border-color:#8c8;color:#8c8">💾 СОХРАНЕНИЕ</div><div class="big" style="color:#8c8">17.04.2012</div><hr style="border-color:#2a2a2a;margin:12px 0"><b>Автосохранение выполнено.</b></div><button class="btn" onclick="L6()">ДАЛЬШЕ</button>','L6'); } else { err('❌ ОТКАЗ.'); if(dmg(20)) return; } }
+
+function L6(){ show(stat()+fragRow()+'<div class="badge">LEVEL 06</div><div class="p">Как зовут игрушечного кота Ульяны?</div><input class="inp" id="a" placeholder="ИМЯ" autocomplete="off"><div class="msg" id="m"></div><button class="btn" onclick="c6()">ПОДТВЕРДИТЬ</button>','L6'); }
+function c6(){ if(v('a') === 'барсик'){ en(-12); xp(100); S.nextFunc='L7'; S.errorStreak = 0; ok('✅ ВЕРНО.'); goNext('L7', 1000); } else { err('❌ ОТКАЗ.'); if(dmg(20)) return; } }
+
+function L7(){ show(stat()+fragRow()+'<div class="badge">LEVEL 07</div><div class="p">Как называется наша любимая комедия?</div><input class="inp" id="a" placeholder="НАЗВАНИЕ" autocomplete="off"><div class="msg" id="m"></div><button class="btn" onclick="c7()">ПОДТВЕРДИТЬ</button>','L7'); }
+function c7(){ var x = v('a'); if(x === 'убойные каникулы' || x === 'убойные'){ en(-12); xp(100); S.nextFunc='L8'; S.errorStreak = 0; ok('✅ ВЕРНО.'); goNext('L8', 1000); } else { err('❌ ОТКАЗ.'); if(dmg(20)) return; } }
+
+function L8(){ show(stat()+fragRow()+'<div class="badge">LEVEL 08 · КОНВЕРТ №2</div><div class="p">Координата повреждена.<br><br><b>ЛПНПЕ</b><br><br>Каждая буква смещена на 1 вперёд. Верни назад.</div><input class="inp" id="a" placeholder="СЛОВО" autocomplete="off"><div class="msg" id="m"></div><button class="btn" onclick="c8()">ПОДТВЕРДИТЬ</button>','L8'); }
+function c8(){ if(v('a') === 'комод'){ en(-12); xp(125); S.nextFunc='L8b'; S.errorStreak = 0; ok('✅ КООРДИНАТА: КОМОД.'); show(stat()+fragRow()+'<div class="badge">НАЙДИ КОНВЕРТ</div><div class="p">Иди туда.<br><br><b>Введи ключ.</b></div><input class="inp" id="a" placeholder="КЛЮЧ" autocomplete="off"><div class="msg" id="m"></div><button class="btn" onclick="c8b()">ВВЕСТИ</button>','L8b'); } else { err('❌ ОТКАЗ.'); if(dmg(20)) return; } }
+function c8b(){ var x = document.getElementById('a').value.trim().toLowerCase(); if(x === 'я' || x === 'ya'){ addFragment('Я'); xp(50); S.nextFunc='L9'; S.errorStreak = 0; ok('✅ КЛЮЧ: Я.'); goNext('L9', 1000); } else { err('❌ ОТКАЗ.'); if(dmg(20)) return; } }
+
+function L9(){ show(stat()+fragRow()+'<div class="badge">LEVEL 09</div><div class="p">Как ты ласково называешь Ульяну?</div><input class="inp" id="a" placeholder="СЛОВО" autocomplete="off"><div class="msg" id="m"></div><button class="btn" onclick="c9()">ПОДТВЕРДИТЬ</button>','L9'); }
+function c9(){ var x = v('a'); if(x === 'рыбка' || x === 'рыбочка'){ en(-12); xp(100); S.nextFunc='L10'; S.errorStreak = 0; ok('✅ ВЕРНО.'); goNext('L10', 1000); } else { err('❌ ОТКАЗ.'); if(dmg(20)) return; } }
+
+function L10(){ show(stat()+fragRow()+'<div class="badge">LEVEL 10 · СОХРАНЕНИЕ</div><div class="p">💾 <b>Дата: 13.02.2023</b><br><br>Что произошло в эту дату?</div><input class="inp" id="a" placeholder="ОТВЕТ" autocomplete="off"><div class="msg" id="m"></div><button class="btn" onclick="c10()">ПОДТВЕРДИТЬ</button>','L10'); }
+function c10(){ var x = v('a'); if(x === 'рождение ульяны' || x === 'родилась ульяна' || x === 'рождение' || x === 'ульяна родилась'){ en(-12); xp(150); savePoint('13.02.2023', L11); S.nextFunc='L11'; S.errorStreak = 0; unlockAchievement('memory2', 'ПАМЯТЬ', 'Пройден уровень с датой без ошибки.'); show(stat()+fragRow()+diary('13.02.2023 — день, когда родилась наша Ульяна.')+'<div class="final"><div class="badge" style="border-color:#8c8;color:#8c8">💾 СОХРАНЕНИЕ</div><div class="big" style="color:#8c8">13.02.2023</div><hr style="border-color:#2a2a2a;margin:12px 0"><b>Автосохранение выполнено.</b></div><button class="btn" onclick="L11()">ДАЛЬШЕ</button>','L11'); } else { err('❌ ОТКАЗ.'); if(dmg(20)) return; } }
+
+function L11(){
+  document.querySelector('h1').style.display = 'none';
+  document.querySelector('h2').style.display = 'none';
+  show(stat()+fragRow()+'<div class="badge">??? · БОЕВАЯ ЗОНА</div><div class="p">⚔️ Подтверди характеристики:<br><br>1. Как зовут маунта?<br>2. Как зовут скрытого NPC?<br>3. Как зовут твоего персонажа?<br>4. Какой класс у твоего персонажа?<br>5. <b>LEVEL: ERROR</b><br>Номер повреждён. Восстанови значение.</div><input class="inp" id="a1" placeholder="1. МАУНТ" autocomplete="off"><input class="inp" id="a2" placeholder="2. NPC" autocomplete="off"><input class="inp" id="a3" placeholder="3. ИМЯ ПЕРСОНАЖА" autocomplete="off"><input class="inp" id="a4" placeholder="4. КЛАСС" autocomplete="off"><input class="inp" id="a5" placeholder="5. LEVEL" autocomplete="off"><div class="msg" id="m"></div><button class="btn" onclick="c11()">ПОДТВЕРДИТЬ</button>','L11');
+}
+function c11(){
+  var a1 = document.getElementById('a1').value.toLowerCase();
+  var a2 = document.getElementById('a2').value.toLowerCase();
+  var a3 = document.getElementById('a3').value.toLowerCase().trim();
+  var a4 = document.getElementById('a4').value.toLowerCase().trim();
+  var a5 = document.getElementById('a5').value.toLowerCase().trim();
+  var nameOk = (S.heroName && a3 === S.heroName.toLowerCase());
+  var classOk = (S.heroClass && a4 === S.heroClass.toLowerCase());
+  var levelOk = (a5 === '11' || a5 === 'одиннадцать');
+  if(a1.indexOf('рыжик') >= 0 && a2.indexOf('света') >= 0 && nameOk && classOk && levelOk){
+    en(-12); hp(-40); xp(200);
+    S.nextFunc='L11b'; S.errorStreak = 0;
+    document.querySelector('h1').style.display = '';
+    document.querySelector('h2').style.display = '';
+    show(stat()+fragRow()+diary('Боевая зона — проверка на прочность. Ты справился, я знала.')+'<div class="final"><div class="badge" style="border-color:#8c8;color:#8c8">⚔️ ПОБЕДА</div><div class="big" style="color:#8c8">−40 HP</div><hr style="border-color:#2a2a2a;margin:12px 0"><b>Ты справился.</b></div><button class="btn" onclick="L11b()">ДАЛЬШЕ</button>','L11');
+  } else { err('❌ ОТКАЗ.'); if(dmg(20)) return; }
+}
+
+function L11b(){
+  show('<div class="final">'+
+    '<div class="badge" style="border-color:#ffd700;color:#ffd700">🏆 LEGENDARY ITEM FOUND</div>'+
+    '<div class="big" style="color:#ffd700">ПРЕДМЕТ ОБНАРУЖЕН</div>'+
+    '<hr style="border-color:#2a2a2a;margin:12px 0">'+
+    'Система зафиксировала легендарный предмет.<br>'+
+    'Он — рядом.<br><br>'+
+    '<b>Открыть?</b>'+
+    '</div>'+
+    '<button class="btn" onclick="L11c()">ОТКРЫТЬ</button>','L11b');
+}
+function L11c(){
+  playError();
+  show('<div class="final">'+
+    '<div class="badge" style="border-color:#c44;color:#c44">❌ ПУСТО</div>'+
+    '<div class="big" style="color:#c44">НИЧЕГО НЕТ</div>'+
+    '<hr style="border-color:#2a2a2a;margin:12px 0">'+
+    'Легендарный лут ещё не заслужен.<br><br>'+
+    '<b>Продолжай путь.</b>'+
+    '</div>'+
+    '<button class="btn" onclick="L12()">ДАЛЬШЕ</button>','L11c');
+}
+
+function L12(){
+  if(ulyanaTimer) clearTimeout(ulyanaTimer);
+  showSystemLog('Предмет всё ещё скрыт.');
+  show(stat()+fragRow()+'<div class="badge">LEVEL 12 · КОНВЕРТ №3</div><div class="p">Числа зашифрованы.<br><br><b>9 6 18 12 1 13 16</b><br><br>Каждое число — буква алфавита.<br>Что получилось?</div><input class="inp" id="a" placeholder="СЛОВО" autocomplete="off"><div class="msg" id="m"></div><button class="btn" onclick="c12()">ПОДТВЕРДИТЬ</button>','L12');
+  ulyanaTimer = setTimeout(function(){
+    if(S.currentFunc === 'L12'){
+      showSmsUlyana('Папа! Я тут подглядела...<br>Мама не видит.<br>Попробуй посмотреть в зеркало.<br>Там точно что-то есть!');
+    }
+  }, 60000);
+}
+function c12(){ if(v('a') === 'зеркало'){ en(-12); xp(125); S.nextFunc='L12b'; S.errorStreak = 0; ok('✅ ЗЕРКАЛО.'); show(stat()+fragRow()+'<div class="badge">НАЙДИ КОНВЕРТ</div><div class="p">Иди туда.<br><br><b>Введи ключ.</b></div><input class="inp" id="a" placeholder="КЛЮЧ" autocomplete="off"><div class="msg" id="m"></div><button class="btn" onclick="c12b()">ВВЕСТИ</button>','L12b'); } else { err('❌ ОТКАЗ.'); if(dmg(20)) return; } }
+function c12b(){ var x = document.getElementById('a').value.trim().toLowerCase(); if(x === 'ь'){ addFragment('Ь'); xp(50); S.nextFunc='L13'; S.errorStreak = 0; ok('✅ КЛЮЧ: Ь.'); goNext('L13', 1000); } else { err('❌ ОТКАЗ.'); if(dmg(20)) return; } }
+
+function L13(){ show(stat()+fragRow()+'<div class="badge">LEVEL 13</div><div class="p">Как зовут твою машину?</div><input class="inp" id="a" placeholder="ИМЯ" autocomplete="off"><div class="msg" id="m"></div><button class="btn" onclick="c13()">ПОДТВЕРДИТЬ</button>','L13'); }
+function c13(){ var x = v('a').replace(/\s/g,''); if(x === 'ховрентийпалыч' || x === 'ховрентий'){ en(-12); xp(100); S.nextFunc='L14'; S.errorStreak = 0; ok('✅ ВЕРНО.'); goNext('L14', 1000); } else { err('❌ ОТКАЗ.'); if(dmg(20)) return; } }
+
+function L14(){ show(stat()+fragRow()+'<div class="badge">LEVEL 14</div><div class="p">Что мы часто пересматриваем в новогодние праздники?</div><input class="inp" id="a" placeholder="НАЗВАНИЕ" autocomplete="off"><div class="msg" id="m"></div><button class="btn" onclick="c14()">ПОДТВЕРДИТЬ</button>','L14'); }
+function c14(){ var x = v('a').replace(/\s/g,''); if(x === 'гаррипоттер'){ en(-12); xp(100); S.nextFunc='L15'; S.errorStreak = 0; ok('✅ ВЕРНО.'); goNext('L15', 1000); } else { err('❌ ОТКАЗ.'); if(dmg(20)) return; } }
+
+function L15(){ show(stat()+fragRow()+'<div class="badge">LEVEL 15 · СОХРАНЕНИЕ</div><div class="p">💾 <b>Дата: 25.02.2023</b><br><br>Что произошло в эту дату?</div><input class="inp" id="a" placeholder="ОТВЕТ" autocomplete="off"><div class="msg" id="m"></div><button class="btn" onclick="c15()">ПОДТВЕРДИТЬ</button>','L15'); }
+function c15(){ var x = v('a'); if(x === 'свадьба' || x === 'роспись' || x === 'поженились'){ en(-12); xp(150); savePoint('25.02.2023', L16); S.nextFunc='L16'; S.errorStreak = 0; unlockAchievement('memory3', 'ПАМЯТЬ', 'Пройден уровень с датой без ошибки.'); show(stat()+fragRow()+diary('25.02.2023 — день, когда мы стали семьёй официально.')+'<div class="final"><div class="badge" style="border-color:#8c8;color:#8c8">💾 СОХРАНЕНИЕ</div><div class="big" style="color:#8c8">25.02.2023</div><hr style="border-color:#2a2a2a;margin:12px 0"><b>Автосохранение выполнено.</b></div><button class="btn" onclick="L16()">ДАЛЬШЕ</button>','L16'); } else { err('❌ ОТКАЗ.'); if(dmg(20)) return; } }
+
+function L16(){ show(stat()+fragRow()+'<div class="badge">LEVEL 16 · КОНВЕРТ №4</div><div class="p">Ребус:<br><br><b>100 Л</b><br><br>Что получилось?</div><input class="inp" id="a" placeholder="СЛОВО" autocomplete="off"><div class="msg" id="m"></div><button class="btn" onclick="c16()">ПОДТВЕРДИТЬ</button>','L16'); }
+function c16(){ if(v('a') === 'стол'){ en(-12); xp(125); S.nextFunc='L16b'; S.errorStreak = 0; ok('✅ СТОЛ.'); show(stat()+fragRow()+'<div class="badge">НАЙДИ КОНВЕРТ</div><div class="p">Иди туда.<br><br><b>Введи ключ.</b></div><input class="inp" id="a" placeholder="КЛЮЧ" autocomplete="off"><div class="msg" id="m"></div><button class="btn" onclick="c16b()">ВВЕСТИ</button>','L16b'); } else { err('❌ ОТКАЗ.'); if(dmg(20)) return; } }
+function c16b(){ var x = document.getElementById('a').value.trim().toLowerCase(); if(x === 'с' || x === 'c'){ addFragment('С'); xp(50); S.nextFunc='L17'; S.errorStreak = 0; ok('✅ КЛЮЧ: С.'); goNext('L17', 1000); } else { err('❌ ОТКАЗ.'); if(dmg(20)) return; } }
+
+function L17(){ show(stat()+fragRow()+'<div class="badge">LEVEL 17</div><div class="p">Куда вы ездили впервые вместе?</div><input class="inp" id="a" placeholder="МЕСТО" autocomplete="off"><div class="msg" id="m"></div><button class="btn" onclick="c17()">ПОДТВЕРДИТЬ</button>','L17'); }
+function c17(){ var x = v('a'); if(x === 'агой'){ en(-12); xp(100); S.nextFunc='L18'; S.errorStreak = 0; ok('✅ ВЕРНО.'); goNext('L18', 1000); } else { err('❌ ОТКАЗ.'); if(dmg(20)) return; } }
+
+function L18(){ show(stat()+fragRow()+'<div class="badge">LEVEL 18</div><div class="p">Как ты ласково называешь Свету?</div><input class="inp" id="a" placeholder="СЛОВО" autocomplete="off"><div class="msg" id="m"></div><button class="btn" onclick="c18()">ПОДТВЕРДИТЬ</button>','L18'); }
+function c18(){ var x = v('a'); if(x === 'котёнок' || x === 'котенок' || x === 'светик'){ en(-12); xp(100); S.nextFunc='L19'; S.errorStreak = 0; ok('✅ ВЕРНО.'); goNext('L19', 1000); } else { err('❌ ОТКАЗ.'); if(dmg(20)) return; } }
+
+function L19(){ show(stat()+fragRow()+'<div class="badge">LEVEL 19 · КОНВЕРТ №5 · СЛОЙ 1</div><div class="p">Перед тобой буквы.<br>Собери слово. Не все буквы нужны.<br><br><b>К О Н С Л И Т А Г Р М</b><br><br>Что получилось?</div><input class="inp" id="a" placeholder="СЛОВО" autocomplete="off"><div class="msg" id="m"></div><button class="btn" onclick="c19()">ПОДТВЕРДИТЬ</button>','L19'); }
+function c19(){
+  if(v('a') === 'книга'){
+    en(-12); xp(100); S.nextFunc='L20'; S.errorStreak = 0;
+    ok('✅ КНИГА.');
+    goNext('L20', 1500);
+  } else {
+    L19err++;
+    if(L19err >= 3){ err('❌ ОТКАЗ. ПОДСКАЗКА: К Н И Г А.'); }
+    else { err('❌ ОТКАЗ.'); }
+    if(dmg(20)) return;
+  }
+}
+
+function L20(){
+  if(ulyanaTimer) clearTimeout(ulyanaTimer);
+  show(stat()+fragRow()+'<div class="badge">LEVEL 20 · КОНВЕРТ №5 · СЛОЙ 2</div><div class="p">Автор зашифрован.<br><br><b>13 1 17 25 1 11</b><br><br>Каждое число — буква алфавита.<br>Что получилось?</div><input class="inp" id="a" placeholder="ФАМИЛИЯ" autocomplete="off"><div class="msg" id="m"></div><button class="btn" onclick="c20()">ПОДТВЕРДИТЬ</button>','L20');
+  ulyanaTimer = setTimeout(function(){
+    if(S.currentFunc === 'L20'){
+      showSmsUlyana('Папа, а я знаю!<br>Это дядя, который написал про рассеянного.<br>А ещё про глупого мышонка!<br>Ты его знаешь!');
+    }
+  }, 60000);
+}
+function c20(){ if(v('a') === 'маршак'){ en(-12); xp(100); S.nextFunc='L21'; S.errorStreak = 0; ok('✅ МАРШАК.'); goNext('L21', 1000); } else { err('❌ ОТКАЗ.'); if(dmg(20)) return; } }
+
+function L21(){ show(stat()+fragRow()+'<div class="badge">LEVEL 21 · КОНВЕРТ №5 · СЛОЙ 3</div><div class="p">Найди эту книгу.<br><br><b>Введи код.</b></div><input class="inp" id="a" placeholder="КОД" autocomplete="off"><div class="msg" id="m"></div><button class="btn" onclick="c21()">ВВЕСТИ</button>','L21'); }
+function c21(){ var x = document.getElementById('a').value.trim().toLowerCase(); if(x === 'е' || x === 'e'){ addFragment('Е'); en(-12); xp(150); S.nextFunc='L22'; S.errorStreak = 0; ok('✅ КЛЮЧ: Е.'); goNext('L22', 1200); } else { err('❌ ОТКАЗ.'); if(dmg(20)) return; } }
+
+function L22(){ show(stat()+fragRow()+'<div class="badge">LEVEL 22 · СОХРАНЕНИЕ</div><div class="p">💾 <b>Дата: 30.06.2026</b><br><br>Не свидетельство о браке.<br>Не свидетельство о рождении.<br>Но дата — одна на двоих.<br>Мы получили это вместе.<br><br>Что это?</div><input class="inp" id="a" placeholder="ОТВЕТ" autocomplete="off"><div class="msg" id="m"></div><button class="btn" onclick="c22()">ПОДТВЕРДИТЬ</button>','L22'); }
+function c22(){ var x = v('a'); if(x === 'права' || x === 'права на машину' || x === 'водительские права' || x === 'водительское удостоверение' || x === 'удостоверение'){ en(-12); xp(200); savePoint('30.06.2026', L23); S.nextFunc='L23'; S.errorStreak = 0; unlockAchievement('memory4', 'ПАМЯТЬ', 'Пройден уровень с датой без ошибки.'); show(stat()+fragRow()+'<div class="final"><div class="badge" style="border-color:#8c8;color:#8c8">💾 СОХРАНЕНИЕ</div><div class="big" style="color:#8c8">30.06.2026</div><hr style="border-color:#2a2a2a;margin:12px 0"><b>Автосохранение выполнено.</b><br><br>Остался финальный босс.</div><button class="btn" onclick="L23()">К БОССУ</button>','L23'); } else { err('❌ ОТКАЗ.'); if(dmg(20)) return; } }
+
+/* ============================================================
+   БОСС
+   ============================================================ */
+var bossQ = [
+  { q:'Важный орган у мужчин,\nОчень им необходим.\nЧтоб проблем с ним избежать,\nНужно знать куда совать.', a:['нос'] },
+  { q:'У какого молодца\nкапля капает с конца?', a:['самовар'] },
+  { q:'Что становится больше,\nесли его перевернуть вверх ногами?', a:['6','9','шесть','девять'] },
+  { q:'Смело в дырочку входи —\nМеньше стал размер, смотри.\nЯ остра, но не опасна.\nИ для всех я безотказна.', a:['точилка'] },
+  { q:'Что всегда идёт,\nно никогда не приходит?', a:['время','часы'] }
+];
+var bossIdx = 0;
+
+function L23(){
+  hideSms(); S.inBoss = false;
+  show(stat()+fragRow()+'<div class="badge">LEVEL 23 · ФИНАЛЬНЫЙ БОСС</div><div class="p">⚠️ <b>ПЕРЕД НАЧАЛОМ БОЯ</b><br><br>После нажатия кнопки назад не будет.<br>Ошибки будут стоить HP.<br>Времени на раздумья станет меньше.<br><br><b>Ты уверен, что хочешь войти?</b></div><button class="btn" onclick="L23yes()">ДА, НАЧАТЬ БОЙ</button><button class="btn" onclick="L23no()">НЕТ</button>','L23');
+}
+function L23no(){
+  show('<div class="final">'+
+    '<div class="badge" style="border-color:#8c8;color:#8c8">СИСТЕМА</div>'+
+    '<div class="big" style="color:#8c8">ПРАВИЛЬНЫЙ ВЫБОР</div>'+
+    '<hr style="border-color:#2a2a2a;margin:12px 0">'+
+    'Иногда разумнее отступить.<br><br>'+
+    '…<br><br>'+
+    '<b>Но Босс уже проснулся.</b><br>'+
+    'Он знает, что ты здесь.<br>'+
+    'Возврата всё равно нет.'+
+    '</div>'+
+    '<button class="btn" onclick="L23yes()">⚔️ НАЧАТЬ БОЙ</button>','L23no');
+}
+function L23yes(){
+  S.inBoss = true; bossErr = 0;
+  show('<div class="final">'+
+    '<div class="badge" style="border-color:#ffd700;color:#ffd700">✅ ПОДТВЕРЖДЕНО</div>'+
+    '<div class="big" style="color:#ffd700">ИГРОК LEVEL 32 ВСТУПИЛ В БОЙ</div>'+
+    '<hr style="border-color:#2a2a2a;margin:12px 0">'+
+    '<b>⚔️ ФИНАЛЬНЫЙ БОСС АКТИВИРОВАН</b><br><br>'+
+    'ПЕРВЫЙ ВОПРОС.'+
+    '</div>'+
+    '<button class="btn" onclick="bossStart()">НАЧАТЬ</button>','L23yes');
+}
+function bossStart(){
+  bossIdx = 0; bossSecs = 600; bossHintShown = false; bossErr = 0; hideSms();
+  if(bossTimer) clearInterval(bossTimer);
+  bossTimer = setInterval(function(){
+    bossSecs--;
+    var el = document.getElementById('bossT');
+    if(el) el.textContent = fmt(bossSecs);
+    if(bossSecs <= 120 && !bossHintShown){
+      bossHintShown = true;
+      var cur = bossQ[bossIdx];
+      if(cur){
+        showSms('Ты застрял.<br>Вот тебе подарок на день рождения.<br>Ответ на этот вопрос:', cur.a[0]);
+      }
+    }
+    if(bossSecs <= 0){ clearInterval(bossTimer); bossTimer = null; hideSms(); die('timer'); }
+  }, 1000);
+  bossShow();
+}
+function bossShow(){
+  if(bossIdx >= bossQ.length){ bossWin(); return; }
+  var q = bossQ[bossIdx];
+  S.nextFunc = 'bossShow';
+  show(stat()+'<div class="badge">БОСС · ВОПРОС '+(bossIdx+1)+'/5</div><div class="p">⏱ <span class="red"><span id="bossT">'+fmt(bossSecs)+'</span></span><br><br>'+q.q.replace(/\n/g,'<br>')+'</div><input class="inp" id="a" placeholder="ОТВЕТ" autocomplete="off"><div class="msg" id="m"></div><button class="btn" onclick="bossCheck()">ОТВЕТИТЬ</button>','bossShow');
+}
+function bossCheck(){
+  var x = v('a').replace(/\s/g,'');
+  var q = bossQ[bossIdx], good = false;
+  for(var i = 0; i < q.a.length; i++){ if(x === q.a[i].replace(/\s/g,'')){ good = true; break; } }
+  if(good){ bossErr = 0; bossIdx++; S.nextFunc='bossShow'; goNext('bossShow', 700); }
+  else {
+    bossErr++;
+    var hint = '';
+    if(bossErr >= 3){ hint = ' ПОДСКАЗКА: '+q.a[0].toUpperCase()+'.'; }
+    if(dmg(30)){ bossDeath(); return; }
+    err('❌ ОТКАЗ. −30 HP. HP: '+S.hp+'/100.'+hint);
+  }
+}
+function bossWin(){
+  if(bossTimer) clearInterval(bossTimer); bossTimer = null; hideSms();
+  S.nextFunc = null;
+  xp(500); S.inBoss = false; finalSecs = 300; finalHintShown = false;
+
+  playFanfare();
+  document.body.classList.add('bossWin');
+  setTimeout(function(){ document.body.classList.remove('bossWin'); }, 1000);
+  sparkle(30);
+
+  var boom = document.createElement('div');
+  boom.className = 'bossBoom';
+  boom.textContent = '💥';
+  document.body.appendChild(boom);
+  setTimeout(function(){ boom.remove(); }, 1000);
+
+  setTimeout(function(){
+    show(stat()+fragRow()+diary('Финальный босс повержен. Ты дошёл до конца. Я знала, что ты справишься.')+'<div class="badge">🏆 БОСС ПОВЕРЖЕН</div><div class="final"><div class="big">ИНВЕНТАРЬ ЗАПОЛНЕН</div><hr style="border-color:#2a2a2a;margin:12px 0">Все 5 фрагментов собраны.<br><br><b>М · Я · Ь · С · Е</b><br><br>Они выданы не в порядке слова.<br>Система не подскажет последовательность.<br><br><b>Собери слово.</b><br><br>⏱ <b id="finalTimerShow">05:00</b></div></div><input class="inp" id="a" placeholder="СЛОВО" autocomplete="off"><div class="msg" id="m"></div><button class="btn" onclick="cFinal()">СОБРАТЬ</button>','bossWin');
+    startFinalTimer();
+  }, 1200);
+}
+function startFinalTimer(){
+  if(finalTimer) clearInterval(finalTimer);
+  var el = document.getElementById('finalTimerShow');
+  if(el) el.textContent = fmt(finalSecs);
+  finalTimer = setInterval(function(){
+    finalSecs--;
+    var el = document.getElementById('finalTimerShow');
+    if(el) el.textContent = fmt(finalSecs);
+    if(finalSecs <= 30 && !finalHintShown){
+      finalHintShown = true;
+      showSms('Неужели для тебя это было так сложно?<br>Ответ:', 'семья');
+    }
+    if(finalSecs <= 0){ clearInterval(finalTimer); finalTimer = null; hideSms(); die('timer'); }
+  }, 1000);
+}
+function cFinal(){
+  if(S.finalDone){ return; }
+  if(v('a') === 'семья'){
+    if(finalTimer) clearInterval(finalTimer); finalTimer = null; hideSms();
+    S.finalDone = true;
+    xp(500); playFanfare(); sparkle(30);
+    ok('🏆 ДОСТИЖЕНИЕ РАЗБЛОКИРОВАНО.');
+    var elapsed = (Date.now() - S.startTime) / 1000;
+    if(elapsed < 600){
+      setTimeout(function(){
+        window._afterSms = function(){
+          S.nextFunc = 'letter1';
+          goNext('letter1', 300);
+        };
+        showSms('🏆 ДОСТИЖЕНИЕ: СПИДРАННЕР<br>Ты прошёл игру меньше чем за 10 минут!', 'Молодец!');
+      }, 2000);
+    } else {
+      S.nextFunc = 'letter1';
+      goNext('letter1', 1500);
+    }
+  } else { err('❌ ОТКАЗ.'); if(dmg(20)) return; }
+}
+function bossDeath(){
+  if(S.bossKills >= 3){
+    hideSms(); S.inBoss = false;
+    show('<div class="final"><div class="badge" style="border-color:#c44;color:#c44">💀 ПЕРСОНАЖ ПОГИБ</div><div class="big" style="color:#c44">NPC БОЛЬШЕ НЕ МОЖЕТ ПОМОЧЬ</div><hr style="border-color:#2a2a2a;margin:12px 0">Ты дошёл до финала.<br>Но босса не победил.<br><br><b>Открой последний конверт.</b></div><button class="btn" onclick="letter1()">ОТКРЫТЬ ПИСЬМО</button>','bossDeath');
+    return;
+  }
+  S.bossKills++;
+  var qs = [
+    { q:'📡 ВХОДЯЩЕЕ СООБЩЕНИЕ.\nИсточник: NPC «СВЕТА».\n\nТвой воин погиб.\nНо я ещё здесь.\n\nКакой мой любимый сериал?', a:['сверхъестественное','сверхъестественный'] },
+    { q:'📡 ВХОДЯЩЕЕ СООБЩЕНИЕ.\nИсточник: NPC «СВЕТА».\n\nТы снова погиб.\nНо я не сдамся.\n\nКакое моё любимое время года?', a:['зима','зимой','зиму'] },
+    { q:'📡 ВХОДЯЩЕЕ СООБЩЕНИЕ.\nИсточник: NPC «СВЕТА».\n\nТы снова погиб.\nЯ даю тебе последний шанс.\n\nКакой мой любимый праздник?', a:['новый год','новыйгод','нг'] }
+  ];
+  var qq = qs[S.bossKills-1];
+  if(bossTimer) clearInterval(bossTimer); bossTimer = null; hideSms();
+  window._bossReviveQ = qq;
+  show(stat()+'<div class="badge" style="border-color:#c44;color:#c44">💀 СМЕРТЬ '+S.bossKills+'/3</div><div class="p">'+qq.q.replace(/\n/g,'<br>')+'</div><input class="inp" id="a" placeholder="ОТВЕТ" autocomplete="off"><div class="msg" id="m"></div><button class="btn" onclick="bossRevive()">ОТВЕТИТЬ</button>','bossDeath');
+}
+function bossRevive(){
+  var x = v('a').replace(/\s/g,'');
+  var qq = window._bossReviveQ, good = false;
+  for(var i = 0; i < qq.a.length; i++){ if(x === qq.a[i].replace(/\s/g,'')){ good = true; break; } }
+  if(good){
+    S.hp = 100; S.en = 100; bossErr = 0;
+    ok('✅ СОЗНАНИЕ ВОССТАНОВЛЕНО.');
+    setTimeout(function(){
+      bossSecs = 600; bossHintShown = false;
+      if(bossTimer) clearInterval(bossTimer);
+      bossTimer = setInterval(function(){
+        bossSecs--;
+        var el = document.getElementById('bossT');
+        if(el) el.textContent = fmt(bossSecs);
+        if(bossSecs <= 120 && !bossHintShown){
+          bossHintShown = true;
+          var cur = bossQ[bossIdx];
+          if(cur){
+            showSms('Ты застрял.<br>Вот тебе подарок на день рождения.<br>Ответ на этот вопрос:', cur.a[0]);
+          }
+        }
+        if(bossSecs <= 0){ clearInterval(bossTimer); bossTimer = null; hideSms(); die('timer'); }
+      }, 1000);
+      bossShow();
+    }, 1500);
+  } else { err('❌ ОТКАЗ.'); }
+}
+
+/* ============================================================
+   ПИСЬМА И ФИНАЛ
+   ============================================================ */
+function letter1(){
+  clearCrit(); hideSms(); S.inBoss = false;
+  if(bossTimer) clearInterval(bossTimer); bossTimer = null;
+  if(finalTimer) clearInterval(finalTimer); finalTimer = null;
+  showSystemLog('Координаты изменены. Ищи выше.');
+  show('<div class="letter"><div class="head">✉️ ПИСЬМО</div><b>Любимый.</b><br><br><b>С днём рождения!</b><br><br>Поздравляю. Ты прошёл игру до конца. И я ни на секунду не сомневалась, что ты справишься.<br><br>Но самое интересное — впереди.<br><br>Потому что сейчас ты поймёшь:<br><br><b>самое ценное ты уже нашёл.</b><br><br><b>СЕМЬЯ.</b><br><br><b>Я, ты и наша Ульяна.</b><br><br><b>И то счастье, которое мы создаём вместе.</b><br><br>И, наверное, именно это я хотела подарить тебе сегодня —<br><br>не вещь, а напоминание о том, как сильно мы тебя любим.<br><br>С днём рождения, мой любимый.<br><br><b>Пусть твой новый LEVEL будет самым счастливым.</b><br><br>С любовью,<br><b>Света ❤️</b></div><button class="btn" onclick="letter2()">ДАЛЬШЕ</button>','letter1');
+}
+function letter2(){
+  show('<div class="letter"><div class="head">💌 ПАПЕ<br><span style="font-size:11px;color:#8a7a5a">От Ульяны ❤️</span></div><div class="center">Папа!<br><br>Я пока маленькая и не умею писать сама.<br>Поэтому сегодня мама помогла мне.<br><br>Но я хочу, чтобы ты знал:<br><br><b>Ты мой папа.</b><br><b>Я тебя очень люблю.</b><br><br>С днём рождения.<br><br>❤️<br><br><b>Твоя Ульяна</b></div></div><button class="btn" onclick="videoUlyana()">ДАЛЬШЕ</button>','letter2');
+}
+function videoUlyana(){
+  show('<div class="final">'+
+    '<div class="badge" style="border-color:#8c8;color:#8c8">📡 НЕИЗВЕСТНЫЙ NPC</div>'+
+    '<div class="big">СИГНАЛ ПОЛУЧЕН</div>'+
+    '<hr style="border-color:#2a2a2a;margin:12px 0">'+
+    'Источник: <b>???</b><br>'+
+    'Файл: <b>получен</b><br>'+
+    'Статус: <b>не распознан</b><br><br>'+
+    'Система не может определить отправителя.<br>'+
+    'Но файл безопасен.'+
+    '</div>'+
+    '<button class="btn" onclick="openUnknownNpc()">ОТКРЫТЬ</button>','videoUlyana');
+}
+function openUnknownNpc(){
+  show('<div class="final">'+
+    '<div class="badge">🎥 ВИДЕО</div>'+
+    '<p style="font-size:12px;color:#b8a880;margin-bottom:10px">Воспроизведение файла...</p>'+
+    '<video controls playsinline preload="metadata" style="width:100%;border-radius:4px;border:1px solid #2a2a2a;margin:12px 0">'+
+    '<source src="https://gh7zt2gw2w-del.github.io/Level32/IMG_5244%202.mov" type="video/quicktime">'+
+    '<source src="https://gh7zt2gw2w-del.github.io/Level32/IMG_5244%202.mov" type="video/mp4">'+
+    'Твой браузер не поддерживает видео.'+
+    '</video>'+
+    '</div>'+
+    '<button class="btn" onclick="identifiedNpc()">ДАЛЬШЕ</button>','videoUlyana');
+}
+function identifiedNpc(){
+  playDing();
+  sparkle(20);
+  show('<div class="final">'+
+    '<div class="badge" style="border-color:#8c8;color:#8c8">✅ NPC IDENTIFIED</div>'+
+    '<div class="big">УЛЬЯНА</div>'+
+    '<hr style="border-color:#2a2a2a;margin:12px 0">'+
+    'Источник сигнала: <b>Ульяна</b><br>'+
+    'Роль: <b>дочь</b><br>'+
+    'Статус: <b>любимая</b><br><br>'+
+    '<b>Файл успешно восстановлен.</b>'+
+    '</div>'+
+    '<button class="btn" onclick="finalBoss()">ДАЛЬШЕ</button>','videoUlyana');
+}
+function finalBoss(){
+  var elapsed = Math.floor((Date.now() - S.startTime) / 1000);
+  var min = Math.floor(elapsed / 60);
+  var sec = elapsed % 60;
+  var timeStr = (min < 10 ? '0' : '') + min + ':' + (sec < 10 ? '0' : '') + sec;
+
+  var totalAchievements = 7;
+  var unlockedCount = S.achievements.length;
+  var status = 'ОБЫЧНЫЙ';
+  if(unlockedCount >= 6) status = 'ЛЕГЕНДАРНЫЙ';
+  else if(unlockedCount >= 4) status = 'ОПЫТНЫЙ';
+  else if(unlockedCount >= 2) status = 'НАЧИНАЮЩИЙ';
+
+  var heroStr = S.heroName ? '<br>Имя: <b>'+S.heroName.toUpperCase()+'</b><br>Класс: <b>'+S.heroClass+'</b><br>' : '';
+
+  show('<div class="final"><div class="badge">ФИНАЛ</div><div class="big">LEVEL 32 COMPLETE.</div><hr style="border-color:#2a2a2a;margin:12px 0">'+
+    '<b>Но это только начало.</b><br><br>Ты прошёл игру.<br>Ты собрал все фрагменты.<br>Ты победил босса.<br><br>'+
+    'Но система оставила последнюю координату.<br><br>'+
+    '<b>Она — не в игре.</b><br><b>Она — в реальной жизни.</b><br><br>'+
+    '<hr style="border-color:#2a2a2a;margin:12px 0">'+
+    '<div class="badge">📊 ОТЧЁТ ИГРОКА</div>'+
+    heroStr+
+    'Уровней пройдено: <b>23</b><br>'+
+    'XP набрано: <b>'+S.xp+'</b><br>'+
+    'Ошибок: <b>'+S.errors+'</b><br>'+
+    'HP восстановлено: <b>'+S.hpRestored+'</b><br>'+
+    'ENERGY потрачено: <b>'+S.enSpent+'</b><br>'+
+    'Смертей: <b>'+S.deaths+'</b><br>'+
+    'Подсказок: <b>'+S.hintsUsed+'</b><br>'+
+    'Время в игре: <b>'+timeStr+'</b><br><br>'+
+    '<b>СТАТУС: '+status+'</b><br><br>'+
+    '<div class="badge">🏆 ДОСТИЖЕНИЯ</div>'+
+    'Открыто: <b>'+unlockedCount+'/'+totalAchievements+'</b>'+
+    '</div><button class="btn" onclick="finalCoord()">УЗНАТЬ КООРДИНАТУ</button>','finalBoss');
+}
+function finalCoord(){
+  show('<div class="final">'+
+    '<div class="badge">🔐 ПОСЛЕДНЯЯ КООРДИНАТА</div>'+
+    '<hr style="border-color:#2a2a2a;margin:12px 0">'+
+    '<b style="font-size:20px;letter-spacing:6px">* О * И * О *</b>'+
+    '</div>'+
+    '<input class="inp" id="a" placeholder="СЛОВО" autocomplete="off">'+
+    '<div class="msg" id="m"></div>'+
+    '<button class="btn" onclick="checkCoord()">ВВЕСТИ</button>','finalCoord');
+}
+function checkCoord(){
+  var x = v('a');
+  if(x === 'коридор'){
+    playDing();
+    ok('✅ КООРДИНАТА РАСШИФРОВАНА.');
+    setTimeout(function(){
+      window._afterSms = function(){
+        show('<div class="final">'+
+          '<div class="badge">🔐 КОДОВОЕ СЛОВО</div>'+
+          '<div class="big">СЕКРЕТ</div>'+
+          '<hr style="border-color:#2a2a2a;margin:12px 0">'+
+          'Ульяна оставила тебе подсказку.<br><br>'+
+          'Введи кодовое слово.<br>'+
+          'Оно — её имя.<br><br>'+
+          '<b>Введи его.</b>'+
+          '</div>'+
+          '<input class="inp" id="a" placeholder="ИМЯ" autocomplete="off">'+
+          '<div class="msg" id="m"></div>'+
+          '<button class="btn" onclick="checkSecretWord()">ВВЕСТИ</button>','finalCoord');
+      };
+      showSmsUlyana('Папа, а если ты введёшь моё имя — я покажу тебе секрет! ❤️');
+    }, 1200);
+  } else {
+    err('❌ НЕВЕРНО. ПОДУМАЙ ЕЩЁ.');
+  }
+}
+function checkSecretWord(){
+  var x = v('a');
+  if(x === 'ульяна' || x === 'ульянка'){
+    playFanfare();
+    sparkle(30);
+    show('<div class="final">'+
+      '<div class="badge">✅ КОДОВОЕ СЛОВО ПРИНЯТО</div>'+
+      '<div class="big">ПОДАРОК ЖДЁТ</div>'+
+      '<hr style="border-color:#2a2a2a;margin:12px 0">'+
+      'Твой подарок ждёт тебя.<br><br>'+
+      '<b>Он — на антресоли.</b>'+
+      '</div>'+
+      '<button class="btn" onclick="credits()">ТИТРЫ</button>','finalCoord');
+  } else {
+    err('❌ НЕВЕРНО. ПОДУМАЙ ЕЩЁ.');
+  }
+}
+function credits(){
+  playFanfare();
+  sparkle(30);
+  show('<div class="final" style="padding:20px 0">'+
+    '<div class="big" style="font-size:18px;letter-spacing:4px">LEVEL 32: НАЧАЛО</div>'+
+    '<hr style="border-color:#2a2a2a;margin:16px 0">'+
+    '<div style="font-size:13px;line-height:2.2">'+
+    'Разработчик: <b>Света</b><br>'+
+    'Издатель: <b>Семья</b><br>'+
+    'Главный герой: <b>'+S.heroName.toUpperCase()+'</b><br>'+
+    'Класс: <b>'+S.heroClass+'</b><br>'+
+    'Звёздный гость: <b>Ульяна</b><br>'+
+    '</div>'+
+    '<hr style="border-color:#2a2a2a;margin:16px 0">'+
+    '<div style="font-size:12px;color:#8a7a5a">Особая благодарность:<br>всем, кто был рядом</div>'+
+    '<hr style="border-color:#2a2a2a;margin:16px 0">'+
+    '<div style="font-size:14px;letter-spacing:3px">2026</div>'+
+    '<br><div style="font-size:12px;color:#5a4a3a">❤️</div>'+
+    '</div><button class="btn" onclick="theEnd()">КОНЕЦ</button>','credits');
+}
+function theEnd(){
+  var elapsed = Math.floor((Date.now() - S.startTime) / 1000);
+  var min = Math.floor(elapsed / 60);
+  var sec = elapsed % 60;
+  var timeStr = (min < 10 ? '0' : '') + min + ':' + (sec < 10 ? '0' : '') + sec;
+  var today = new Date();
+  var dateStr = today.getDate() + '.' + (today.getMonth()+1) + '.' + today.getFullYear();
+
+  show('<div class="final" style="padding:20px 0">'+
+    '<div class="big" style="font-size:16px;letter-spacing:4px">КОНЕЦ</div><br>'+
+    '<div style="font-size:12px;color:#8a7a5a">Спасибо за игру.</div><br>'+
+    '<div style="font-size:12px;color:#8a7a5a">С любовью,<br>Света ❤️</div>'+
+    '<hr style="border-color:#2a2a2a;margin:20px 0">'+
+    '<div class="cert">'+
+    '<div class="title">СЕРТИФИКАТ</div>'+
+    '<div style="font-size:11px;color:#8a7a5a">подтверждает, что</div>'+
+    '<div class="name">'+S.heroName.toUpperCase()+'</div>'+
+    '<div class="sub">прошёл игру<br><b>LEVEL 32: НАЧАЛО</b><br>и получил легендарный лут</div>'+
+    '<div class="date">'+dateStr+' · XP: '+S.xp+' · Время: '+timeStr+'</div>'+
+    '</div>'+
+    '<br><button class="btn" onclick="restart()">ИГРАТЬ СНОВА</button>'+
+    '</div>','theEnd');
+}
+
+/* Запуск */
+addAvatar();
+addDust();
+updateInventory();
+start();
+</script>
+</body>
+</html>
